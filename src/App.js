@@ -74,7 +74,7 @@ class App extends Component {
       <div className="App">
         <Toolbar />
         <MessageList 
-        messages={ this.state.messages }
+          messages={ this.state.messages }
         />
       </div>
     );

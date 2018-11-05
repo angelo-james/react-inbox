@@ -7,11 +7,12 @@ class MessageList extends Component {
     let messageList = this.props.messages.map( ( message, index ) => {
       return (
         <Message 
-          key={ index } message={ message }
+          key={ index } 
+          message={ message }
         />
       )
     })
-    
+
     return (
       <div>
         { messageList }
