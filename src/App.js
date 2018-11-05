@@ -69,12 +69,30 @@ class App extends Component {
     ]
   }
 
+  starredMessage = ( message ) => {
+    message.starred = !message.starred
+    this.setState( this.state.messages.concat( message ))
+  }
+
+  selectedMessage = ( message ) => {
+    message.selected = !message.selected
+    this.setState( this.state.messages.concat( message ))
+  }
+
+  readMessage = ( message ) => {
+    message.read = true
+    this.setState( this.state.messages.concat( message ))
+  }
+
   render() {
     return (
       <div className="App">
         <Toolbar />
         <MessageList 
           messages={ this.state.messages }
+          starredMessage={ this.starredMessage }
+          selectedMessage={ this.selectedMessage }
+          readMessage={ this.readMessage }
         />
       </div>
     );

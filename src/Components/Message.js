@@ -1,57 +1,39 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-class Message extends Component {
-  state = {
-      read: false,
-      selected: false,
-      starred: false,
-      subject: ''
-  }
-  componentDidMount(){
-    this.setState({...this.props.message})
-  }
-
-  handleFavorite = () => {
-    this.setState({
-      starred: !this.state.starred
-    })
-  }
-
-  handleChecked = () => {
-    this.setState({
-      selected: !this.state.selected
-    })
-  }
-
-  render(){
-    const { read, selected, starred, subject } = this.state;
+const Message = ( { message, starredMessage, selectedMessage, readMessage } ) => {
+  let labels = message.labels.map( ( label, index )  => {
     return (
+      <span key={ index } className="label label-warning">{ label }</span>
+    )
+  })
 
-      <div className={`row message ${ read ? 'read' : 'unread' } ${ selected ? 'selected' : '' }`}>
+  return (
+      <div className={`row message ${ message.read ? 'read' : 'unread' } ${ message.selected ? 'selected' : '' }`}>
         <div className="col-xs-1">
           <div className="row">
             <div className="col-xs-2">
-              <input type="checkbox" checked={ selected } onClick={ this.handleChecked }/>
+              <input 
+                type="checkbox" 
+                checked={ message.selected }
+                onChange={ () => selectedMessage( message )}
+                />
             </div>
             <div className="col-xs-2">
-              <i onClick={ this.handleFavorite }
-                className={`star fa fa-star${ starred ? '' : '-o' }`}></i>
+              <i className={`star fa fa-star${ message.starred ? '' : '-o' }`} onClick={ () => starredMessage( message )}></i>
             </div>
           </div>
         </div>
-        <div className="col-xs-11">
+        <div 
+          className="col-xs-11"
+          onClick={ () => readMessage( message )}
+        >
+            { labels }
           <a href="#">
-            { subject }
+            { message.subject }
           </a>
         </div>
       </div>
-    )
-  }
-  // let labels = message.labels.map( ( label ) => {
-  //   return (
-  //     <span className="label label-warning">{ label }</span>
-  //   )
-  // })
+  )
 }
 
 export default Message;
