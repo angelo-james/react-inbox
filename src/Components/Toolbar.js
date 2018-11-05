@@ -10,15 +10,26 @@ class Toolbar extends Component {
             unread messages
           </p>
 
-          <button className="btn btn-default">
-            <i className="fa fa-square-o"></i>
+          <button 
+            onClick={ () => this.props.selectedBoxFunction() }
+            className="btn btn-default">
+            <i 
+              className={`fa fa${ this.props.selectedBox() }-square-o`}
+              ></i>
           </button>
 
-          <button className="btn btn-default" disabled="disabled">
+          <button 
+            onClick={ () => this.props.markReadFunction() }
+            className="btn btn-default" 
+            disabled=""
+          >
             Mark As Read
           </button>
 
-          <button className="btn btn-default" disabled="disabled">
+          <button 
+            onClick={ () => this.props.markUnreadFunction() }
+            className="btn btn-default" 
+            disabled="">
             Mark As Unread
           </button>
 
