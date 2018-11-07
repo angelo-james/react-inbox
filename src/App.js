@@ -141,7 +141,7 @@ class App extends Component {
   disableReadButton = () => {
     let selectedMessages = this.state.messages.filter( message => message.selected )
     let readStatusArray = selectedMessages.map( message => {
-      return message.read === true
+      return message.read ? true : false
     })
     return readStatusArray.includes( true ) || readStatusArray.length === 0 ? 'disabled' : ''
   }
@@ -149,9 +149,55 @@ class App extends Component {
   disableUnreadButton = () => {
     let selectedMessages = this.state.messages.filter( message => message.selected )
     let readStatusArray = selectedMessages.map( message => {
-      return message.read === false
+      return message.read ? true : false
     })
-    return readStatusArray.includes( false ) || readStatusArray.length === 0 ? '' : 'disabled'
+    return readStatusArray.includes( false ) || readStatusArray.length === 0 ? 'disabled' : ''
+  }
+
+  disabledDeleteMessageButton = () => {
+    let selectedMessages = this.state.messages.filter( message => message.selected )
+    let readStatusArray = selectedMessages.map( message => {
+      return message.selected ? true : false
+    })
+    return readStatusArray.includes( false ) || readStatusArray.length === 0 ? 'disabled' : ''
+  }
+
+  deleteMessage = () => {
+    this.setState({
+      messages: this.state.messages.filter( message => {
+        return !message.selected
+      })
+    })
+  }
+
+  disabledApplyLabelMenu = () => {
+    let selectedMessages = this.state.messages.filter( message => message.selected ).length
+    return selectedMessages === 0 ? 'disabled' : ''
+  }
+
+  disabledRemoveLabelMenu = () => {
+    let selectedMessages = this.state.messages.filter( message => message.selected ).length
+    return selectedMessages === 0 ? 'disabled' : ''
+  }
+
+  applyLabelFunc = (label) => {
+    if(label === 'Apply label') return 
+    let selectedMessages = this.state.messages.filter( message => message.selected )
+
+    this.setState( this.state.messages.concat( selectedMessages.map( message => {
+      if ( message.labels.includes(label) ) return message
+      message.labels.push(label)
+      return message
+    } ) ) )
+  }
+
+  removeLabelFunc = (label) => {
+    if(label === 'Remove label') return
+    let selectedMessages = this.state.messages.filter( message => message.selected )
+    this.setState( this.state.messages.concat( selectedMessages.map( message => {
+      message.labels.splice(label, 1)
+      return message
+    } ) ) )
   }
 
   render() {
@@ -166,6 +212,11 @@ class App extends Component {
           markUnreadFunction={ this.markUnreadFunction }
           disableReadButton={ this.disableReadButton }
           disableUnreadButton={ this.disableUnreadButton }
+          disabledDeleteMessageButton={ this.disabledDeleteMessageButton }
+          disabledApplyLabelMenu={ this.disabledApplyLabelMenu }
+          disabledRemoveLabelMenu={ this.disabledRemoveLabelMenu }
+          applyLabelFunc={ this.applyLabelFunc }
+          removeLabelFunc={ this.removeLabelFunc }
         />
         {/* all the MessageList props and methods being passed to the MessageList component */}
         <MessageList 

@@ -36,14 +36,22 @@ class Toolbar extends Component {
             Mark As Unread
           </button>
 
-          <select className="form-control label-select" disabled="disabled">
+          <select 
+            className="form-control label-select" 
+            disabled={ `${ this.props.disabledApplyLabelMenu() }` }
+            onChange={ () => this.props.applyLabelFunc( document.querySelectorAll('select')[0].value ) }
+          >
             <option>Apply label</option>
             <option value="dev">dev</option>
             <option value="personal">personal</option>
             <option value="gschool">gschool</option>
           </select>
 
-          <select className="form-control label-select" disabled="disabled">
+          <select 
+            className="form-control label-select" 
+            disabled={ `${ this.props.disabledRemoveLabelMenu() }` }
+            onChange={ () => this.props.removeLabelFunc( document.querySelectorAll('select')[0].value ) }
+            >
             <option>Remove label</option>
             <option value="dev">dev</option>
             <option value="personal">personal</option>
@@ -52,7 +60,7 @@ class Toolbar extends Component {
 
           <button 
             className="btn btn-default" 
-            disabled="disabled"
+            disabled={ `${ this.props.disabledDeleteMessageButton() }` }
             >
             <i className="fa fa-trash-o"></i>
           </button>
