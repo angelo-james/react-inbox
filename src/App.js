@@ -138,15 +138,34 @@ class App extends Component {
     }) ))
   }
 
+  disableReadButton = () => {
+    let selectedMessages = this.state.messages.filter( message => message.selected )
+    let readStatusArray = selectedMessages.map( message => {
+      return message.read === true
+    })
+    return readStatusArray.includes( true ) || readStatusArray.length === 0 ? 'disabled' : ''
+  }
+
+  disableUnreadButton = () => {
+    let selectedMessages = this.state.messages.filter( message => message.selected )
+    let readStatusArray = selectedMessages.map( message => {
+      return message.read === false
+    })
+    return readStatusArray.includes( false ) || readStatusArray.length === 0 ? '' : 'disabled'
+  }
+
   render() {
     return (
       <div className="App">
         {/* all the toolbar methods and props being passed to the Toolbar Component */}
         <Toolbar 
+          messages={ this.state.messages }
           selectedBox={ this.selectedBox }
           selectedBoxFunction={ this.selectedBoxFunction }
           markReadFunction={ this.markReadFunction }
           markUnreadFunction={ this.markUnreadFunction }
+          disableReadButton={ this.disableReadButton }
+          disableUnreadButton={ this.disableUnreadButton }
         />
         {/* all the MessageList props and methods being passed to the MessageList component */}
         <MessageList 
