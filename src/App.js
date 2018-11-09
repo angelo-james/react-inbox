@@ -34,7 +34,6 @@ class App extends Component {
         'Accept': 'application/json',
       }
     })
-    console.log(message.id)
     message.starred = !message.starred
     this.setState( this.state.messages.concat( message ))
   }
@@ -88,19 +87,59 @@ class App extends Component {
   }
 
   markReadFunction = () => {
+    let messageIds = [];
+
     let selectedMessages = this.state.messages.filter( message => message.selected ) 
+    selectedMessages.forEach( message => {
+      message.selected = true
+      messageIds.push(message.id)
+    } )
+
+    fetch('http://localhost:8082/api/messages', {
+      method: 'PATCH',
+      body: JSON.stringify({
+        messageIds,
+        command: 'read',
+        read: true
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+
     this.setState( this.state.messages.concat( selectedMessages.map( message => {
       message.read = true
       return message
-    }) ))
+    } ) ) )
   }
 
   markUnreadFunction = () => {
-    let selectedMessages = this.state.messages.filter( message => message.selected ) 
+    let messageIds = [];
+
+    let selectedMessages = this.state.messages.filter( message => message.selected )
+    selectedMessages.forEach( message => {
+      message.selected = false
+      messageIds.push(message.id)
+    } )
+
+    fetch('http://localhost:8082/api/messages', {
+      method: 'PATCH',
+      body: JSON.stringify({
+        messageIds,
+        command: 'read',
+        read: false
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+
     this.setState( this.state.messages.concat( selectedMessages.map( message => {
       message.read = false
       return message
-    }) ))
+    } ) ) )
   }
 
   disableReadButton = () => {
