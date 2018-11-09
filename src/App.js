@@ -22,6 +22,19 @@ class App extends Component {
   }
   //starredMessage method is checking if the method is true or false and setting the key of starred opposite to what it is currently set as
   starredMessage = ( message ) => {
+    message.messageIds = [ message.id ]
+    message.command = 'star'
+    fetch('http://localhost:8082/api/messages', {
+      method: 'PATCH',
+      body: JSON.stringify(
+        message
+      ),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+    console.log(message.id)
     message.starred = !message.starred
     this.setState( this.state.messages.concat( message ))
   }
