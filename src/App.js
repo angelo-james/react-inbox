@@ -199,11 +199,24 @@ class App extends Component {
 
   applyLabelFunc = (label) => {
     if(label === 'Apply label') return 
-    let selectedMessages = this.state.messages.filter( message => message.selected )
+    let selectedMessages = this.state.messages.filter( message => message.selected ).map( m => m.id )
 
-    this.setState( this.state.messages.concat( selectedMessages.map( message => {
+    fetch('http://localhost:8082/api/messages', {
+      method: 'PATCH',
+      body: JSON.stringify({
+        messageIds: selectedMessages,
+        label: label,
+        command: 'addLabel'
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+
+    this.setState( this.state.messages.concat( this.state.messages.map( message => {
       if ( message.labels.includes(label) ) return message
-      message.labels.push(label)
+      if ( message.selected ) message.labels.push(label)
       return message
     } ) ) )
   }
