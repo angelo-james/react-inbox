@@ -22,13 +22,14 @@ class App extends Component {
   }
   //starredMessage method is checking if the method is true or false and setting the key of starred opposite to what it is currently set as
   starredMessage = ( message ) => {
-    message.messageIds = [ message.id ]
-    message.command = 'star'
+    let messageIds = [ message.id ]
+  
     fetch('http://localhost:8082/api/messages', {
       method: 'PATCH',
-      body: JSON.stringify(
-        message
-      ),
+      body: JSON.stringify({
+        messageIds,
+        command: 'star'
+      }),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -167,11 +168,23 @@ class App extends Component {
   }
 
   deleteMessage = () => {
-    this.setState({
-      messages: this.state.messages.filter( message => {
-        return !message.selected
-      })
+    let { messages } = this.state;
+
+    let messageIds = messages.filter( message => message.selected ).map( m => m.id )
+
+    fetch('http://localhost:8082/api/messages', {
+      method: 'PATCH',
+      body: JSON.stringify({
+        messageIds,
+        command: 'delete'
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
     })
+
+    this.setState( { messages: messages.filter( message => !message.selected ) } )
   }
 
   disabledApplyLabelMenu = () => {
@@ -217,6 +230,7 @@ class App extends Component {
           disableReadButton={ this.disableReadButton }
           disableUnreadButton={ this.disableUnreadButton }
           disabledDeleteMessageButton={ this.disabledDeleteMessageButton }
+          deleteMessage={ this.deleteMessage }
           disabledApplyLabelMenu={ this.disabledApplyLabelMenu }
           disabledRemoveLabelMenu={ this.disabledRemoveLabelMenu }
           applyLabelFunc={ this.applyLabelFunc }
