@@ -12,6 +12,10 @@ class Toolbar extends Component {
             unread messages
           </p>
 
+          <button className="btn btn-danger" >
+            <i className="fa fa-plus"></i>
+          </button>
+
           <button 
             onClick={ () => this.props.selectedBoxFunction() }
             className="btn btn-default">

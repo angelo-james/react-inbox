@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 import Toolbar from './Components/Toolbar';
+import ComposeForm from './Components/ComposeForm'
 import MessageList from './Components/MessageList'
 
 class App extends Component {
@@ -222,7 +223,6 @@ class App extends Component {
   }
 
   removeLabelFunc = (label) => {
-    console.log(label)
     if(label === 'Remove label') return
     let selectedMessages = this.state.messages.filter( message => message.selected ).map( m => m.id )
 
@@ -245,6 +245,10 @@ class App extends Component {
     } ) ) )
   }
 
+  toggleComposeForm = (e) => {
+    return e === "hide" ? "show" : "hide"
+  }
+
   render() {
     return (
       <div className="App">
@@ -263,7 +267,9 @@ class App extends Component {
           disabledRemoveLabelMenu={ this.disabledRemoveLabelMenu }
           applyLabelFunc={ this.applyLabelFunc }
           removeLabelFunc={ this.removeLabelFunc }
+          toggleComposeForm={ this.toggleComposeForm }
         />
+        <ComposeForm />
         {/* all the MessageList props and methods being passed to the MessageList component */}
         <MessageList 
           messages={ this.state.messages }
