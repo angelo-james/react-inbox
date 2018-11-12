@@ -222,10 +222,25 @@ class App extends Component {
   }
 
   removeLabelFunc = (label) => {
+    console.log(label)
     if(label === 'Remove label') return
-    let selectedMessages = this.state.messages.filter( message => message.selected )
-    this.setState( this.state.messages.concat( selectedMessages.map( message => {
-      message.labels.splice(label, 1)
+    let selectedMessages = this.state.messages.filter( message => message.selected ).map( m => m.id )
+
+    fetch('http://localhost:8082/api/messages', {
+      method: 'PATCH',
+      body: JSON.stringify({
+        messageIds: selectedMessages,
+        label: label,
+        command: 'removeLabel'
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+
+    this.setState( this.state.messages.concat( this.state.messages.map( message => {
+      if ( message.labels.includes(label) && message.selected ) message.labels.splice(label, 1)
       return message
     } ) ) )
   }

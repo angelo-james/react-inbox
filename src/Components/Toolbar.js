@@ -50,7 +50,7 @@ class Toolbar extends Component {
           <select 
             className="form-control label-select" 
             disabled={ `${ this.props.disabledRemoveLabelMenu() }` }
-            onChange={ () => this.props.removeLabelFunc( document.querySelectorAll('select')[0].value ) }
+            onChange={ (e) => this.props.removeLabelFunc( e.target.value ) }
             >
             <option>Remove label</option>
             <option value="dev">dev</option>
