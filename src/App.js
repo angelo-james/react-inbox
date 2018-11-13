@@ -8,7 +8,8 @@ import MessageList from './Components/MessageList'
 class App extends Component {
 
   state = {
-    messages: []
+    messages: [],
+    display: false
   }
 
   async componentDidMount() {
@@ -245,8 +246,8 @@ class App extends Component {
     } ) ) )
   }
 
-  toggleComposeForm = (e) => {
-    return e === "hide" ? "show" : "hide"
+  toggleComposeForm = () => {
+    this.setState( { display: !this.state.display } )
   }
 
   render() {
@@ -269,7 +270,7 @@ class App extends Component {
           removeLabelFunc={ this.removeLabelFunc }
           toggleComposeForm={ this.toggleComposeForm }
         />
-        <ComposeForm />
+        { this.state.display ? <ComposeForm display={ this.state.display }/> : false}
         {/* all the MessageList props and methods being passed to the MessageList component */}
         <MessageList 
           messages={ this.state.messages }

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 
 export default class ComposeForm extends Component {
+
   render() {
     return (
-      <div className="hide">
+      <div>
         <form className="form-horizontal well">
           <div className="form-group">
             <div className="col-sm-8 col-sm-offset-2">
