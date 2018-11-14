@@ -48,6 +48,19 @@ class App extends Component {
   //read method is setting the value of the key read to true when clicked
   readMessage = ( message ) => {
     message.read = true
+
+    fetch('http://localhost:8082/api/messages', {
+      method: 'PATCH',
+      body: JSON.stringify({
+        messageIds: [message.id],
+        command: 'read',
+        read: true
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
     this.setState( this.state.messages.concat( message ))
   }
   //selectedBox method is 
@@ -241,13 +254,40 @@ class App extends Component {
     })
 
     this.setState( this.state.messages.concat( this.state.messages.map( message => {
-      if ( message.labels.includes(label) && message.selected ) message.labels.splice(label, 1)
+      if ( message.selected ) {
+        message.labels = message.labels.filter(innerLabel => innerLabel !== label)
+      }
       return message
     } ) ) )
   }
 
   toggleComposeForm = () => {
     this.setState( { display: !this.state.display } )
+  }
+
+  addMessage = (message) => {
+    fetch('http://localhost:8082/api/messages', {
+      method: 'POST',
+      headers: {
+        "Content-Type": 'application/json',
+        "Accept": 'application/json'
+      },
+      body: JSON.stringify({
+        subject: message.subject,
+        body: message.body
+      })
+    })
+    .then( () => {
+      this.state.display = false
+      this.getMessages()
+    })
+  }
+
+  getMessages = async () => {
+    const results = await fetch('http://localhost:8082/api/messages');
+    const messages = await results.json();
+    this.setState({messages});
+    
   }
 
   render() {
@@ -270,7 +310,7 @@ class App extends Component {
           removeLabelFunc={ this.removeLabelFunc }
           toggleComposeForm={ this.toggleComposeForm }
         />
-        { this.state.display ? <ComposeForm display={ this.state.display }/> : false}
+        { this.state.display ? <ComposeForm addMessage={ this.addMessage }/> : false}
         {/* all the MessageList props and methods being passed to the MessageList component */}
         <MessageList 
           messages={ this.state.messages }
